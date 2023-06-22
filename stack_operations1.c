@@ -42,3 +42,61 @@ void pall(stack_t **stack, unsigned int line_number)
 		ptr = ptr->next;
 	}
 }
+/**
+ * pint - The opcode pint prints the top element in the stack
+ * @stack: stack
+ * @line_number: op_code line number
+ * Return: void
+*/
+void pint(stack_t **stack, unsigned int line_number) 
+{
+	if (!(*stack))
+	{
+		fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
+		unload(NULL, *stack);
+		exit(EXIT_FAILURE);
+	}
+	printf("%d\n", (*stack)->n);
+}
+/**
+ * pop - The opcode pop removes the top element of the stack
+ * @stack: stack
+ * @line_number: op_code line number
+ * Return: void
+*/
+void pop(stack_t **stack, unsigned int line_number)
+{
+	if (!(*stack))
+	{
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
+		unload(NULL, *stack);
+		exit(EXIT_FAILURE);
+	}
+	delete_stack_beg(stack);
+}
+/**
+ * swap - The opcode swap sswaps the two top element of the stack
+ * @stack: stack
+ * @line_number: op_code line number
+ * Return: void
+*/
+void swap(stack_t **stack, unsigned int line_number)
+{
+	size_t len;
+	stack_t *ptr = (*stack)->next;
+
+	len = stack_length(*stack);
+	if (len < 2)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short", line_number);
+		unload(NULL, *stack);
+		exit(EXIT_FAILURE);
+	}
+	(*stack)->next = ptr->next;
+	ptr->next = *stack;
+	ptr->prev = (*stack)->prev;
+	(*stack)->prev = ptr;
+	if (ptr->next)
+		ptr->next->prev = *stack;
+	*stack = ptr;
+}

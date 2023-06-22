@@ -16,11 +16,11 @@ int check(char *s)
 */
 char *get(char *string, stack_t *stack)
 {
-	int i = 0, malloced = 20, prev_malloced;
+	int i = 0, j = 0, malloced = 20, prev_malloced, status = 0;
 	char *ret = malloc(malloced), *ptr;
 
 	handle_malloc(ret, stack, 1);
-	while (string[i] != '\0')
+	while (string[j] != '\0')
 	{
 		if (i == malloced)
 		{
@@ -34,11 +34,25 @@ char *get(char *string, stack_t *stack)
 			}
 			ret = ptr;
 		}
-		if (string[i] == ' ')
+		if (string[j] == ' ' && status)
 			break;
-		ret[i] = string[i];
+		if (string[j] == ' ' && !status)
+		{
+			j++;
+			continue;
+		}
+		ret[i] = string[j];
+		status = 1;
 		i++;
+		j++;
 	}
 	ret[i] = '\0';
 	return (ret);
 }
+
+/*void handle_comments(char *got, char * string)
+{
+        if (got[0] == '#' || string[0] == '#')
+
+}
+*/

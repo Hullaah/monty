@@ -26,6 +26,11 @@ int main(int argc, char *argv[])
 	for (i = 0; vector[i]; i++)
 	{
 		gotten = get(vector[i], stack);
+		if (gotten[0] == '\0' || gotten[0] == '#' || vector[i][0] == '#')
+		{
+			free(gotten);
+			continue;
+		}
 		op = get_ops(gotten);
 		if (!op)
 		{

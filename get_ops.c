@@ -11,6 +11,15 @@ void (*get_ops(char *s))(stack_t **stack, unsigned int line_number)
 	instruction_t op[] = {
 		{"push", push},
 		{"pall", pall},
+		{"pint", pint},
+		{"swap", swap},
+		{"pop", pop},
+                {"add", add},
+                {"nop", nop},
+                {"sub", sub},
+                {"mul", mul},
+                {"div", divide},
+                {"mod", mod},
 		{NULL, NULL}
 	};
 

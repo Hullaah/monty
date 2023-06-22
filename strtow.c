@@ -10,8 +10,10 @@ int word_count(char *str, char delim)
 	int i = 1;
 	int words = 0;
 
-	if (str[0] != delim)
+	if (str[0] != delim && str[0] != '\0')
 		words++;
+        if (str[0] == '\0')
+                return (0);
 	for (; str[i] != '\0'; i++)
 	{
 		if (str[i] != delim && str[i - 1] == delim)
@@ -107,10 +109,8 @@ char **strtow(char *str, char delim)
 	char **string_arr;
 	char *tmp;
 
-	if (str == NULL || total_word == 0)
-	{
+	if (str == NULL)
 		return (NULL);
-	}
 	string_arr = malloc((total_word + 1) * sizeof(char *));
 	if (string_arr == NULL)
 		return (NULL);

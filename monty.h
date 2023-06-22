@@ -45,6 +45,8 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *fp);
 
 char **strtow(char *str, char delim);
 
+char **strtow_include(char *str, char delim);
+
 int _strcmp(char *s1, char *s2);
 
 char *get(char *string, stack_t *stack);
@@ -67,12 +69,32 @@ int check(char *s);
 
 stack_t *add_stack(stack_t **head, int n);
 
+void delete_stack_beg(stack_t **head);
+
 void print_stack(stack_t *h);
+
+size_t stack_length(stack_t *h);
 
 void push(stack_t **stack, unsigned int line_number);
 
 void pall(stack_t **stack, unsigned int line_number);
 
-void delete_stack_beg(stack_t **head);
+void pint(stack_t **stack, unsigned int line_number);
+
+void pop(stack_t **stack, unsigned int line_number);
+
+void swap(stack_t **stack, unsigned int line_number);
+
+void add(stack_t **stack, unsigned int line_number);
+
+void nop(stack_t **stack, unsigned int line_number);
+
+void sub(stack_t **stack, unsigned int line_number);
+
+void mul(stack_t **stack, unsigned int line_number);
+
+void divide(stack_t **stack, unsigned int line_number);
+
+void mod(stack_t **stack, unsigned int line_number);
 
 #endif
