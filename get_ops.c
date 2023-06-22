@@ -14,12 +14,12 @@ void (*get_ops(char *s))(stack_t **stack, unsigned int line_number)
 		{"pint", pint},
 		{"swap", swap},
 		{"pop", pop},
-                {"add", add},
-                {"nop", nop},
-                {"sub", sub},
-                {"mul", mul},
-                {"div", divide},
-                {"mod", mod},
+		{"add", add},
+		{"nop", nop},
+		{"sub", sub},
+		{"mul", mul},
+		{"div", divide},
+		{"mod", mod},
 		{NULL, NULL}
 	};
 

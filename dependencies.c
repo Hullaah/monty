@@ -49,10 +49,3 @@ char *get(char *string, stack_t *stack)
 	ret[i] = '\0';
 	return (ret);
 }
-
-/*void handle_comments(char *got, char * string)
-{
-        if (got[0] == '#' || string[0] == '#')
-
-}
-*/

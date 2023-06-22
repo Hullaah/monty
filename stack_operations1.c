@@ -48,7 +48,7 @@ void pall(stack_t **stack, unsigned int line_number)
  * @line_number: op_code line number
  * Return: void
 */
-void pint(stack_t **stack, unsigned int line_number) 
+void pint(stack_t **stack, unsigned int line_number)
 {
 	if (!(*stack))
 	{

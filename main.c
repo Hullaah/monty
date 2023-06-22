@@ -20,11 +20,13 @@ int main(int argc, char *argv[])
 	handle_preload_error(0, fp, 1, argv[1]);
 	_getline(&lineptr, &n, fp);
 	fclose(fp);
-	vector = strtow(lineptr, '\n');
+	vector = convert_lines(lineptr, '\n');
 	free(lineptr);
 	handle_malloc(NULL, stack, 0);
 	for (i = 0; vector[i]; i++)
 	{
+		if (!_strcmp(vector[i], "\n"))
+			continue;
 		gotten = get(vector[i], stack);
 		if (gotten[0] == '\0' || gotten[0] == '#' || vector[i][0] == '#')
 		{

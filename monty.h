@@ -45,7 +45,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *fp);
 
 char **strtow(char *str, char delim);
 
-char **strtow_include(char *str, char delim);
+char **convert_lines(char *str, char delim);
 
 int _strcmp(char *s1, char *s2);
 

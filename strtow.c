@@ -12,8 +12,8 @@ int word_count(char *str, char delim)
 
 	if (str[0] != delim && str[0] != '\0')
 		words++;
-        if (str[0] == '\0')
-                return (0);
+	if (str[0] == '\0')
+		return (0);
 	for (; str[i] != '\0'; i++)
 	{
 		if (str[i] != delim && str[i - 1] == delim)
