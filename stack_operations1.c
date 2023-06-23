@@ -92,7 +92,7 @@ void swap(stack_t **stack, unsigned int line_number)
 		unload(NULL, *stack);
 		exit(EXIT_FAILURE);
 	}
-        ptr = (*stack)->next;
+	ptr = (*stack)->next;
 	(*stack)->next = ptr->next;
 	ptr->next = *stack;
 	ptr->prev = (*stack)->prev;
