@@ -13,7 +13,7 @@ void push(stack_t **stack, unsigned int line_number)
 	stack_t *ptr;
 
 	vec = strtow(vector[idx], ' ');
-	if (!vec[1] || !check(vec[1]))
+	if (!vec[1] || !check((vec[1][0] == '-') ? vec[1] + 1 : vec[1]))
 	{
 		fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		free_vec(vec);
@@ -83,7 +83,7 @@ void pop(stack_t **stack, unsigned int line_number)
 void swap(stack_t **stack, unsigned int line_number)
 {
 	size_t len;
-	stack_t *ptr = (*stack)->next;
+	stack_t *ptr;
 
 	len = stack_length(*stack);
 	if (len < 2)
@@ -92,6 +92,7 @@ void swap(stack_t **stack, unsigned int line_number)
 		unload(NULL, *stack);
 		exit(EXIT_FAILURE);
 	}
+        ptr = (*stack)->next;
 	(*stack)->next = ptr->next;
 	ptr->next = *stack;
 	ptr->prev = (*stack)->prev;

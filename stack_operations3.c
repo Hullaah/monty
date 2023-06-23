@@ -37,7 +37,7 @@ void pchar(stack_t **stack, unsigned int line_number)
 		unload(NULL, *stack);
 		exit(EXIT_FAILURE);
 	}
-	if ((*stack)->n >= 0 && (*stack)->n <= 255)
+	if ((*stack)->n >= 0 && (*stack)->n <= 127)
 		printf("%c\n", (*stack)->n);
 	else
 	{
@@ -60,7 +60,7 @@ void pstr(stack_t **stack, unsigned int line_number)
 	UNUSED(line_number);
 	while (ptr != NULL)
 	{
-		if (!(ptr->n > 0 && ptr->n < 256))
+		if (!(ptr->n > 0 && ptr->n < 127))
 			break;
 		putchar(ptr->n);
 		ptr = ptr->next;
