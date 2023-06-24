@@ -66,12 +66,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *fp)
 		if (num_read == 0)
 			break;
 		i += copy_to_buf(c, *lineptr, i, num_read);
-		if ((*lineptr)[i - 1] == '\n')
-			break;
 	}
-	if (!num_read)
-		(*lineptr)[i] = '\0';
-	else
-		(*lineptr)[i - 1] = '\0';
+	(*lineptr)[i] = '\0';
 	return (i);
 }

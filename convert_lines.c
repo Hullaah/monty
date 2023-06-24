@@ -29,9 +29,9 @@ int lines_count(char *str, char delim)
 */
 int lines_length(char *str, int word, char delim, int total_words)
 {
-	int i = 0, j = 0, words = 0, len = (int) strlen(str);
+	int i = 0, j = 0, words = 0, len = (int) strlen(str) - 1;
 
-	if (word == total_words)
+	if (word == total_words && str[len] != delim)
 	{
 		while (str[len] != delim)
 		{
@@ -83,7 +83,7 @@ char *get_lines(char *str, int word, char delim, int total_words)
 {
 	int i = 0, words = 0, ret, len = (int) strlen(str) - 1;
 
-	if (word == total_words)
+	if (word == total_words && str[len] != delim)
 	{
 		while (str[len] != delim)
 		{
