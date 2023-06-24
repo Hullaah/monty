@@ -37,15 +37,28 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+/**
+ * struct program - a structure for the program life
+ * @life.vector: the buffer that'll store the input read from the file
+ * @queue: an integer denoting whether the data structure is a queue
+ * @stack: an integer denoting whether the data structure is a stack
+ * Description: this structure stores what'd be needed throughout the life
+ * cycle of the program
+*/
+typedef struct program
+{
+        char **vector;
+        int stack;
+        int queue;
+} program;
 
-
-extern char **vector;
+extern program life;
 
 ssize_t _getline(char **lineptr, size_t *n, FILE *fp);
 
 char **strtow(char *str, char delim);
 
-char **convert_lines(char *str, char delim);
+char **convert_buf(char *str);
 
 int _strcmp(char *s1, char *s2);
 
@@ -68,6 +81,8 @@ void free_stack(stack_t *head);
 int check(char *s);
 
 stack_t *add_stack(stack_t **head, int n);
+
+stack_t *add_queue(stack_t **head, int n);
 
 void delete_stack_beg(stack_t **head);
 
@@ -104,5 +119,9 @@ void pstr(stack_t **stack, unsigned int line_number);
 void rotl(stack_t **stack, unsigned int line_number);
 
 void rotr(stack_t **stack, unsigned int line_number);
+
+void queue(stack_t **stack, unsigned int line_number);
+
+void _stack(stack_t **stack, unsigned int line_number);
 
 #endif

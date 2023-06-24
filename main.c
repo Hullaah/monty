@@ -1,5 +1,5 @@
 #include "monty.h"
-char **vector;
+program life;
 /**
  * main - entry point
  * @argc: command-line argument count
@@ -20,15 +20,15 @@ int main(int argc, char *argv[])
 	handle_preload_error(0, fp, 1, argv[1]);
 	_getline(&lineptr, &n, fp);
 	fclose(fp);
-	vector = convert_lines(lineptr, '\n');
+	life.vector = convert_buf(lineptr);
 	free(lineptr);
 	handle_malloc(NULL, stack, 0);
-	for (i = 0; vector[i]; i++)
+	for (i = 0; life.vector[i]; i++)
 	{
-		if (!_strcmp(vector[i], "\n"))
+		if (!_strcmp(life.vector[i], "\n"))
 			continue;
-		gotten = get(vector[i], stack);
-		if (gotten[0] == '\0' || gotten[0] == '#' || vector[i][0] == '#')
+		gotten = get(life.vector[i], stack);
+		if (gotten[0] == '\0' || gotten[0] == '#' || life.vector[i][0] == '#')
 		{
 			free(gotten);
 			continue;

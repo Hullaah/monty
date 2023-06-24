@@ -12,7 +12,7 @@ void push(stack_t **stack, unsigned int line_number)
 	char **vec;
 	stack_t *ptr;
 
-	vec = strtow(vector[idx], ' ');
+	vec = strtow(life.vector[idx], ' ');
 	if (!vec[1] || !check((vec[1][0] == '-') ? vec[1] + 1 : vec[1]))
 	{
 		fprintf(stderr, "L%u: usage: push integer\n", line_number);
@@ -21,7 +21,7 @@ void push(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	i = atoi(vec[1]);
-	ptr = add_stack(stack, i);
+	ptr = (life.stack) ? add_stack(stack, i) : add_queue(stack, i);
 	handle_malloc(NULL, ptr, 2);
 	free_vec(vec);
 }

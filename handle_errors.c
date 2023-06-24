@@ -32,7 +32,7 @@ void handle_preload_error(int argc, FILE *fp, int flag, char *file)
 */
 void handle_malloc(char *string, stack_t *stack, int flag)
 {
-	if (flag == 0 && !vector)
+	if (flag == 0 && !life.vector)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		unload(string, stack);
@@ -59,16 +59,16 @@ void handle_malloc(char *string, stack_t *stack, int flag)
 */
 void unload(char *string, stack_t *stack)
 {
-	if (vector)
-		free_vec(vector);
+	if (life.vector)
+		free_vec(life.vector);
 	if (string)
 		free(string);
 	if (stack)
 		free_stack(stack);
 }
 /**
- * free_vec - frees a vector
- * @vec: vector to be freed
+ * free_vec - frees a life.vector
+ * @vec: life.vector to be freed
  * Return: void
 */
 void free_vec(char **vec)
