@@ -98,7 +98,7 @@ void rotl(stack_t **stack, unsigned int line_number)
 */
 void rotr(stack_t **stack, unsigned int line_number)
 {
-	stack_t *ptr = *stack, *tmp, *last;
+	stack_t *ptr = *stack, *last;
 	size_t len = stack_length(*stack);
 
 	UNUSED(line_number);
@@ -109,15 +109,13 @@ void rotr(stack_t **stack, unsigned int line_number)
 			rotl(stack, line_number);
 			return;
 		}
-		tmp = ptr->next;
 		while (ptr->next->next)
 			ptr = ptr->next;
 		last = ptr->next;
-		(*stack)->next = NULL;
-		(*stack)->prev = ptr;
-		ptr->next = *stack;
-		tmp->prev = last;
-		last->next = tmp;
+		last->next = *stack;
+		last->prev = NULL;
+		(*stack)->prev = last;
+		ptr->next = NULL;
 		*stack = last;
 	}
 }
