@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	life.vector = convert_buf(lineptr);
 	free(lineptr);
 	handle_malloc(NULL, stack, 0);
-        life.stack = 1;
+	life.stack = 1;
 	for (i = 0; life.vector[i]; i++)
 	{
 		if (!_strcmp(life.vector[i], "\n"))
