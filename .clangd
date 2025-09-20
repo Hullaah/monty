@@ -1,0 +1,7 @@
+---
+If:
+  PathMatch: bytecodes/.*
+Diagnostics:
+  Suppress: '*'
+Index:
+  Background: Skip

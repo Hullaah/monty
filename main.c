@@ -1,5 +1,41 @@
 #include "monty.h"
-program life;
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+
+struct monty_state *monty;
+
+/**
+ * readContents - reads the contents of a file descriptor
+ * @fd: file descriptor
+ * Return: pointer to the contents or NULL on failure
+ */
+static char *readContents(int fd)
+{
+	char tmp[1024];
+	char *contents;
+	ssize_t size, n = 0;
+
+	contents = NULL;
+	while ((size = read(fd, tmp, sizeof(tmp))) > 0) {
+		n += size;
+		contents = realloc(contents, n + 1);
+		if (contents == NULL) {
+			printf("Error: malloc failed\n");
+			return NULL;
+		}
+		strncpy(contents + n - size, tmp, size);
+	}
+	contents[n] = '\0';
+	if (size < 0) {
+		printf("Error: Can't read file\n");
+		return NULL;
+	}
+	return contents;
+}
+
 /**
  * main - entry point
  * @argc: command-line argument count
@@ -8,42 +44,38 @@ program life;
 */
 int main(int argc, char *argv[])
 {
-	char *lineptr = NULL, *gotten;
-	size_t n = 0;
-	FILE *fp;
-	unsigned int i;
-	stack_t *stack = NULL;
-	void (*op)(stack_t **, unsigned int);
-
-	handle_preload_error(argc, NULL, 0, NULL);
-	fp = fopen(argv[1], "r");
-	handle_preload_error(0, fp, 1, argv[1]);
-	_getline(&lineptr, &n, fp);
-	fclose(fp);
-	life.vector = convert_buf(lineptr);
-	free(lineptr);
-	handle_malloc(NULL, stack, 0);
-	life.stack = 1;
-	for (i = 0; life.vector[i]; i++)
-	{
-		if (!_strcmp(life.vector[i], "\n"))
-			continue;
-		gotten = get(life.vector[i], stack);
-		if (gotten[0] == '\0' || gotten[0] == '#' || life.vector[i][0] == '#')
-		{
-			free(gotten);
-			continue;
-		}
-		op = get_ops(gotten);
-		if (!op)
-		{
-			fprintf(stderr, "L%u: unknown instruction %s\n", i + 1, gotten);
-			unload(gotten, stack);
-			exit(EXIT_FAILURE);
-		}
-		free(gotten);
-		op(&stack, i + 1);
+	if (argc != 2) {
+		printf("USAGE: monty file\n");
+		return EXIT_FAILURE;
 	}
-	unload(NULL, stack);
-	exit(EXIT_SUCCESS);
+	int fd = open(argv[1], O_RDONLY);
+	if (fd < 0) {
+		printf("Error : Can't open file %s\n", argv[1]);
+		return EXIT_FAILURE;
+	}
+	monty = malloc(sizeof(struct monty_state));
+	if (monty == NULL) {
+		printf("Error: malloc failed\n");
+		close(fd);
+		return EXIT_FAILURE;
+	}
+	char *buffer = readContents(fd);
+	close(fd);
+	if (buffer == NULL) {
+		free(monty);
+		return EXIT_FAILURE;
+	}
+	monty->lines = strtow(buffer, '\n');
+	monty->current_line = 1;
+	monty->stack = true;
+	if (monty->lines == NULL) {
+		free(buffer);
+		free(monty);
+		printf("Error: malloc failed\n");
+		return EXIT_FAILURE;
+	}
+	execute(monty);
+	freevec(monty->lines);
+	free(monty);
+	return EXIT_SUCCESS;
 }
