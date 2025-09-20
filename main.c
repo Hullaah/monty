@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
 		printf("Error: malloc failed\n");
 		return EXIT_FAILURE;
 	}
+	free(buffer);
 	execute(monty);
 	freevec(monty->lines);
 	free(monty);

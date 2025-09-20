@@ -2,6 +2,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+static char *getword(char *str, int start, int len)
+{
+	char *word = calloc(len + 1, sizeof(char));
+	if (word == NULL)
+		return (NULL);
+	for (int i = 0; i < len; i++)
+		word[i] = str[start + i];
+	word[len] = '\0';
+	return (word);
+}
+
 /**
  * shrink_vector - shrinks the vector to the actual size
  * @vector: the vector to shrink
@@ -10,14 +21,14 @@
  */
 static char **shrink_vector(char **vector, int veclen)
 {
-	char **tmp;
-	tmp = (char **)calloc(veclen, sizeof(char *));
-	if (tmp == NULL)
+	char **new_vec;
+	new_vec = (char **)calloc(veclen, sizeof(char *));
+	if (new_vec == NULL)
 		return (NULL);
 	for (int k = 0; k < veclen; k++)
-		tmp[k] = vector[k];
+		new_vec[k] = vector[k];
 	free(vector);
-	return tmp;
+	return new_vec;
 }
 
 /**
@@ -35,7 +46,7 @@ static char **resize(char **vector, int n)
 	if (new_vec == NULL)
 		return (NULL);
 	while (*vector) {
-		new_vec[i] = *vector;
+		new_vec[i++] = *vector;
 		vector++;
 	}
 	return new_vec;
@@ -50,8 +61,9 @@ static char **resize(char **vector, int n)
  */
 char **strtow(char *string, char delim)
 {
-	char **vector;
-	int veclen = 0, strlen = 0, i = 0, j = 0;
+	char **vector, **tmp;
+	char *word;
+	int veclen = 0, stringlen = 0, i = 0, j = 0;
 	int n;
 	bool in_word = false;
 
@@ -62,27 +74,54 @@ char **strtow(char *string, char delim)
 	while (string[i]) {
 		if (string[i] != delim && !in_word) {
 			j = i;
-			strlen++;
+			stringlen++;
 			in_word = true;
 		} else if (string[i] == delim && in_word) {
 			in_word = false;
-			char *word = calloc(strlen, sizeof(char));
-			if (word == NULL)
+			word = getword(string, j, stringlen);
+			if (word == NULL) {
+				freevec(vector);
 				return (NULL);
-			for (int k = 0; k < strlen; k++)
-				word[k] = string[j++];
-			strlen = 0;
-			if (veclen == n) {
-				n *= 2;
-				vector = resize(vector, n);
 			}
-			vector[veclen] = word;
-			vector[++veclen] = NULL;
+			stringlen = 0;
+			if (veclen + 1 == n) {
+				n *= 2;
+				tmp = vector;
+				vector = resize(vector, n);
+				free(tmp);
+				if (vector == NULL) {
+					freevec(vector);
+					return (NULL);
+				}
+			}
+			vector[veclen++] = word;
+			vector[veclen] = NULL;
 		} else if (in_word) {
-			strlen++;
+			stringlen++;
 		}
 		i++;
 	}
+	if (in_word) {
+		word = getword(string, j, stringlen);
+		if (word == NULL) {
+			freevec(vector);
+			return (NULL);
+		}
+		if (veclen + 1 == n) {
+			n *= 2;
+			tmp = vector;
+			vector = resize(vector, n);
+			free(tmp);
+			if (vector == NULL) {
+				freevec(vector);
+				return (NULL);
+			}
+		}
+		vector[veclen++] = word;
+		vector[veclen] = NULL;
+	}
 	vector[veclen++] = NULL;
-	return n == veclen ? vector : shrink_vector(vector, veclen);
+	return (n == veclen				      ? vector :
+		(tmp = shrink_vector(vector, veclen)) == NULL ? NULL :
+								tmp);
 }

@@ -34,5 +34,6 @@ void execute(struct monty_state *monty)
 			func(&s, monty->current_line);
 			monty->current_line++;
 		}
+		freevec(tokens);
 	}
 }
