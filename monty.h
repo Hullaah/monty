@@ -2,10 +2,16 @@
 #define MONTY_H
 
 #include <stddef.h>
-#include <stdio.h>
 #include <stdbool.h>
 
+#define CLEAN_STACK (1 << 0)
+#define CLEAN_TOKENS (1 << 1)
+#define CLEAN_LINES (1 << 2)
+#define CLEAN_MONTY (1 << 3)
+#define CLEAN_ALL (CLEAN_STACK | CLEAN_TOKENS | CLEAN_LINES | CLEAN_MONTY)
+
 #define UNUSED(x) ((void)(x))
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -43,8 +49,9 @@ typedef struct instruction_s {
  */
 struct monty_state {
 	char **lines;
-	bool stack;
 	unsigned int current_line;
+	bool stack;
+	bool error;
 };
 
 extern struct monty_state *monty;
@@ -54,6 +61,15 @@ char **strtow(char *str, char delim);
 void execute(struct monty_state *monty);
 
 void freevec(char **vector);
+
+void freestack(stack_t *sentinel);
+
+bool empty(stack_t *s);
+
+void do_cleanup(struct monty_state *monty, char **lines, char **tokens,
+		stack_t *s, unsigned int flags);
+
+char **remove_comments(char **tokens);
 
 void (*dispatch(char *s))(stack_t **stack, unsigned int line_number);
 

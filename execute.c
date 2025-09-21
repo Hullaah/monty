@@ -1,6 +1,21 @@
 #include "monty.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+/**
+ * sentinel - creates and initializes a sentinel node for the stack
+ * Return: pointer to the sentinel node or NULL on failure
+ */
+inline static stack_t *sentinel(void)
+{
+	stack_t *s = malloc(sizeof(stack_t));
+	if (s == NULL)
+		return NULL;
+	s->next = s;
+	s->prev = s;
+	return s;
+}
 
 /**
  * execute - executes the monty bytecode commands
@@ -8,16 +23,30 @@
 */
 void execute(struct monty_state *monty)
 {
-	stack_t *s = NULL;
+	stack_t *s = sentinel();
 	void (*func)(stack_t **stack, unsigned int line_number);
 
+	if (s == NULL) {
+		do_cleanup(monty, monty->lines, NULL, NULL,
+			   CLEAN_MONTY | CLEAN_LINES);
+		printf("Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
 	for (char **traverser = monty->lines; *traverser; traverser++) {
 		char *line = monty->lines[monty->current_line - 1];
-		char **tokens = strtow(line, ' ');
+		char **tmp, **tokens;
+
+		tmp = strtow(line, ' ');
+		if (tmp == NULL) {
+			do_cleanup(monty, monty->lines, NULL, s,
+				   CLEAN_LINES | CLEAN_MONTY | CLEAN_STACK);
+			printf("Error: malloc failed\n");
+			exit(EXIT_FAILURE);
+		}
+		tokens = remove_comments(tmp);
 		if (tokens == NULL) {
-			freevec(tokens);
-			freevec(monty->lines);
-			free(monty);
+			do_cleanup(monty, monty->lines, NULL, s,
+				   CLEAN_LINES | CLEAN_MONTY | CLEAN_STACK);
 			printf("Error: malloc failed\n");
 			exit(EXIT_FAILURE);
 		}
@@ -26,14 +55,19 @@ void execute(struct monty_state *monty)
 			if (!func) {
 				printf("L%u: unknown instruction %s\n",
 				       monty->current_line, tokens[0]);
-				freevec(tokens);
-				freevec(monty->lines);
-				free(monty);
+				do_cleanup(monty, monty->lines, tokens, s,
+					   CLEAN_ALL);
 				exit(EXIT_FAILURE);
 			}
 			func(&s, monty->current_line);
-			monty->current_line++;
+			if (monty->error) {
+				do_cleanup(monty, monty->lines, tokens, s,
+					   CLEAN_ALL);
+				exit(EXIT_FAILURE);
+			}
 		}
 		freevec(tokens);
+		monty->current_line++;
 	}
+	freestack(s);
 }

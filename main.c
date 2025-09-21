@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
 	monty->lines = strtow(buffer, '\n');
 	monty->current_line = 1;
 	monty->stack = true;
+	monty->error = false;
 	if (monty->lines == NULL) {
 		free(buffer);
 		free(monty);

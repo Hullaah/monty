@@ -1,7 +1,25 @@
 #include "monty.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void divide(stack_t **stack, unsigned int line_number)
 {
-	UNUSED(stack);
-	UNUSED(line_number);
+	stack_t *first, *second;
+
+	first = (*stack)->next;
+	second = first->next;
+	if (empty(*stack) || second == *stack) {
+		printf("L%u: can't div, stack too short\n", line_number);
+		monty->error = true;
+		return;
+	}
+	if (first->n == 0) {
+		printf("L%u: division by zero\n", line_number);
+		monty->error = true;
+		return;
+	}
+	second->n /= first->n;
+	first->prev->next = second;
+	second->prev = first->prev;
+	free(first);
 }

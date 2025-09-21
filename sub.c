@@ -1,7 +1,20 @@
 #include "monty.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-void sub(stack_t **stack, unsigned int line_number)
+void sub(stack_t **sentinel, unsigned int line_number)
 {
-	UNUSED(stack);
-	UNUSED(line_number);
+	stack_t *first, *second;
+
+	first = (*sentinel)->next;
+	second = first->next;
+	if (empty(*sentinel) || second == *sentinel) {
+		printf("L%u: can't sub, stack too short\n", line_number);
+		monty->error = true;
+		return;
+	}
+	second->n -= first->n;
+	first->prev->next = second;
+	second->prev = first->prev;
+	free(first);
 }

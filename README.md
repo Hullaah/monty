@@ -1,68 +1,153 @@
-# Monty
+# 🏗️ Monty Bytecode Interpreter — Stack & Queue Virtual Machine in C
 
-**Exploring Stacks and Bytecode Interpretation**
+This project is a **stack-based bytecode interpreter** written in C.  
+It executes Monty bytecode files line by line, implementing core **stack and queue operations** along with arithmetic and string instructions.
 
-Welcome to my Monty repository! This project delves into the world of stacks and bytecode interpretation using the C programming language.
+The interpreter is modular, making it easy to extend with new opcodes.
 
-## Key Goals:
+## 📌 Motivation
 
-- **Master Stack Operations:** Develop a deep understanding of stack data structures, including pushing, popping, and managing data efficiently.
-- **Interpret Bytecode  Instructions:** Learn to decode and execute bytecode instructions, simulating a virtual machine-like environment.
+The Monty project was built to:
 
-## Features:
+- Deepen understanding of **stacks**, **queues**, and **data structures** in C  
+- Gain hands-on experience with **parsing**, **error handling**, and **low-level programming**  
+- Practice writing clean, modular code that mimics real interpreters and virtual machines  
 
-- **Stack Implementation:** Provides core stack functionalities for data storage and retrieval.
-- **Bytecode Interpreter:** Reads and executes custom bytecode instructions, manipulating data on the stack.
 
-## Supported Bytecode Instructions:
-- **push `<int>`**: The opcode push pushes an element to the stack.
-    * *Usage*: push `<int>` where `<int>` is an integer
-    * if `<int>` is not an integer or if there is no argument given to push, prints the error message `L<line_number>: usage: push integer`, followed by a new line
+## ✨ Key Features
 
-- **pall**: The opcode pall prints all the values on the stack, starting from the top of the stack.
-    * *Usage*: pall
+- ✅ Stack (LIFO) and Queue (FIFO) modes  
+- ✅ Arithmetic instructions (`add`, `sub`, `mul`, `div`, `mod`)  
+- ✅ String/char printing instructions (`pchar`, `pstr`)  
+- ✅ Rotation instructions (`rotl`, `rotr`)  
+- ✅ Robust error handling with line numbers  
+- ✅ Modular opcode handlers — easy to extend  
 
-- **pint**: The opcode pint prints the value at the top of the stack, followed by a new line.
-    * *Usage*: pint
-    * If the stack is empty, print the error message `L<line_number>: can't pint, stack empty`
+## 🧾 Supported Bytecode Instructions
 
-- **pop**: The opcode pop removes the top element of the stack.
-    * *Usage*: pop
-    * If the stack is empty, print the error message `L<line_number>: can't pop an empty stack`
-
-- **swap**: The opcode swap swaps the top two elements of the stack.
-    * *Usage*: swap
-    * If the stack contains less than two elements, print the error message `L<line_number>: can't swap, stack too short`
-
-- **add**: The opcode add adds the top two elements of the stack.
-    * *Usage:* add
-    * If the stack contains less than two elements, print the error message `L<line_number>: can't add, stack too short`
-    * The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-        - The top element of the stack contains the result
-        - The stack is one element shorter
-
-- **nop**: The opcode nop doesn’t do anything.
-    * *Usage:* nop
-
-- **sub**: The opcode sub subtracts the top two elements of the stack.
-    * *Usage:* sub
-    * If the stack contains less than two elements, print the error message `L<line_number>: can't sub, stack too short`
-    * The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-        - The top element of the stack contains the result
-        - The stack is one element shorter
-
-- **div**: The opcode div divides the second top element of the stack by the top element of the stack.
-    * *Usage:* div
-    * If the stack contains less than two elements, print the error message `L<line_number>: can't div, stack too short`
-    * The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-        - The top element of the stack contains the result
-        - The stack is one element shorter
-    * If the top element of the stack is 0, print the error message `L<line_number>: division by zero`
-
-- **mul**: The opcode mul multiplies the second top element of the stack with the top element of the stack.
-    * *Usage*: mul
-    * If the stack contains less than two elements, print the error message `L<line_number>: can't mul, stack too short`
-    * The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-        - The top element of the stack contains the result
-        - The stack is one element shorter
+| Opcode | Description | Usage | Error Cases |
+|--------|-------------|-------|-------------|
+| **push `<int>`** | Pushes an integer onto the stack | `push 5` | Missing argument or non-integer → `L<line>: usage: push integer` |
+| **pall** | Print all values on the stack, from top down | `pall` | — |
+| **pint** | Print the value at the top of the stack | `pint` | Stack empty → `L<line>: can't pint, stack empty` |
+| **pop** | Remove the top element of the stack | `pop` | Stack empty → `L<line>: can't pop an empty stack` |
+| **swap** | Swap the top two elements of the stack | `swap` | Fewer than two elements → `L<line>: can't swap, stack too short` |
+| **add** | Add the top two elements | `add` | Fewer than two elements → `L<line>: can't add, stack too short` |
+| **sub** | Subtract top element from second top | `sub` | Fewer than two elements → `L<line>: can't sub, stack too short` |
+| **mul** | Multiply top two elements | `mul` | Fewer than two elements → `L<line>: can't mul, stack too short` |
+| **div** | Divide the second top element by the top | `div` | Fewer than two → `L<line>: can't div, stack too short`; division by zero → `L<line_number>: division by zero`|
+| **mod** | Modulus of second top by top | `mod` | Fewer than two elements → `L<line>: can't mod, stack too short`; modulus by zero → `L<line_number>: division by zero`|
+| **nop** | Does nothing | `nop` | — |
         
+## 🛠️ Building the Project
+
+### 🔧 Requirements
+- GCC or Clang  
+- `make`  
+- Unix-like OS (Linux, macOS, WSL, etc.)  
+
+### 🧪 Build Instructions
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Hullaah/monty.git
+cd monty
+```
+2. Build the project:
+```bash
+make
+```
+3. Optionally, generate compile_commands.json for code navigation
+```bash
+bear -- make
+```
+
+## ▶️ Usage
+Run the interpreter with a Monty bytecode file:
+```bash
+./monty <file.m>
+```
+Example:
+```bash
+➜  monty git:(main) ✗ cat bytecodes/89.m 
+push 100
+push 20
+push 5
+push 4
+mul
+pall
+div
+pall                             
+                             div
+push 25
+add
+pall
+push 90
+push 120
+push 30
+                  sub
+pall
+mod
+pall
+# div
+# pall
+push # 50
+➜  monty git:(main) ✗ ./monty bytecodes/89.m 
+20
+20
+100
+1
+100
+125
+90
+90
+125
+0
+125
+L22: usage: push integer
+➜  monty git:(main) ✗ valgrind ./monty bytecodes/89.m
+==125624== Memcheck, a memory error detector
+==125624== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==125624== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==125624== Command: ./monty bytecodes/89.m
+==125624== 
+20
+20
+100
+1
+100
+125
+90
+90
+125
+0
+125
+L22: usage: push integer
+==125624== 
+==125624== HEAP SUMMARY:
+==125624==     in use at exit: 0 bytes in 0 blocks
+==125624==   total heap usage: 163 allocs, 163 frees, 4,163 bytes allocated
+==125624== 
+==125624== All heap blocks were freed -- no leaks are possible
+==125624== 
+==125624== For lists of detected and suppressed errors, rerun with: -s
+==125624== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+➜  monty git:(main) ✗   
+```
+
+## 🧠 What I Learned
+- How stack and queue data structures are implemented at a low level
+- Writing interpreters that parse and execute instructions line by line
+- Designing modular opcode dispatch systems
+- Handling edge cases gracefully (empty stack, bad instructions, division by zero)
+- Error reporting with helpful line numbers
+
+## 👨‍💻 Author
+**Umar Adelowo**
+
+Intermediate systems programmer focused on **OS, networking,** and **low-level development.**
+Aiming to contribute to the **Linux Kernel** and become a **security and systems expert.**
+
+[📧 Contact me](umaradelo1.247@gmail.com)
+
+🌐 GitHub: [@Hullaah](https://github.com/Hullaah)
