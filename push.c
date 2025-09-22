@@ -32,24 +32,30 @@ void push(stack_t **sentinel, unsigned int line_number)
 	}
 	char **tmp = strtow(monty->lines[line_number - 1], ' ');
 	if (tmp == NULL) {
-		printf("Error: malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		free(node);
 		monty->error = true;
 		return;
 	}
 	char **tokens = remove_comments(tmp);
-	if (!valid(tokens[1]))
-	{
+	if (!valid(tokens[1])) {
 		freevec(tokens);
 		free(node);
-		printf("L%u: usage: push integer\n", line_number);
+		fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		monty->error = true;
 		return;
 	}
 	node->n = atoi(tokens[1]);
 	freevec(tokens);
-	node->next = (*sentinel)->next;
-	node->prev = *sentinel;
-	(*sentinel)->next->prev = node;
-	(*sentinel)->next = node;
+	if (monty->stack) {
+		node->next = (*sentinel)->next;
+		node->prev = *sentinel;
+		(*sentinel)->next->prev = node;
+		(*sentinel)->next = node;
+	} else {
+		node->next = *sentinel;
+		node->prev = (*sentinel)->prev;
+		(*sentinel)->prev->next = node;
+		(*sentinel)->prev = node;
+	}
 }

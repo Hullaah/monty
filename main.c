@@ -23,14 +23,14 @@ static char *readContents(int fd)
 		n += size;
 		contents = realloc(contents, n + 1);
 		if (contents == NULL) {
-			printf("Error: malloc failed\n");
+			fprintf(stderr, "Error: malloc failed\n");
 			return NULL;
 		}
 		strncpy(contents + n - size, tmp, size);
 	}
 	contents[n] = '\0';
 	if (size < 0) {
-		printf("Error: Can't read file\n");
+		fprintf(stderr, "Error: Can't read file\n");
 		return NULL;
 	}
 	return contents;
@@ -45,17 +45,17 @@ static char *readContents(int fd)
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		printf("USAGE: monty file\n");
+		fprintf(stderr, "USAGE: monty file\n");
 		return EXIT_FAILURE;
 	}
 	int fd = open(argv[1], O_RDONLY);
 	if (fd < 0) {
-		printf("Error : Can't open file %s\n", argv[1]);
+		fprintf(stderr, "Error : Can't open file %s\n", argv[1]);
 		return EXIT_FAILURE;
 	}
 	monty = malloc(sizeof(struct monty_state));
 	if (monty == NULL) {
-		printf("Error: malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		close(fd);
 		return EXIT_FAILURE;
 	}
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	if (monty->lines == NULL) {
 		free(buffer);
 		free(monty);
-		printf("Error: malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		return EXIT_FAILURE;
 	}
 	free(buffer);

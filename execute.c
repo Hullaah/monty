@@ -29,7 +29,7 @@ void execute(struct monty_state *monty)
 	if (s == NULL) {
 		do_cleanup(monty, monty->lines, NULL, NULL,
 			   CLEAN_MONTY | CLEAN_LINES);
-		printf("Error: malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
 	for (char **traverser = monty->lines; *traverser; traverser++) {
@@ -40,20 +40,20 @@ void execute(struct monty_state *monty)
 		if (tmp == NULL) {
 			do_cleanup(monty, monty->lines, NULL, s,
 				   CLEAN_LINES | CLEAN_MONTY | CLEAN_STACK);
-			printf("Error: malloc failed\n");
+			fprintf(stderr, "Error: malloc failed\n");
 			exit(EXIT_FAILURE);
 		}
 		tokens = remove_comments(tmp);
 		if (tokens == NULL) {
 			do_cleanup(monty, monty->lines, NULL, s,
 				   CLEAN_LINES | CLEAN_MONTY | CLEAN_STACK);
-			printf("Error: malloc failed\n");
+			fprintf(stderr, "Error: malloc failed\n");
 			exit(EXIT_FAILURE);
 		}
 		if (tokens[0] && strcmp(tokens[0], "")) {
 			func = dispatch(tokens[0]);
 			if (!func) {
-				printf("L%u: unknown instruction %s\n",
+				fprintf(stderr, "L%u: unknown instruction %s\n",
 				       monty->current_line, tokens[0]);
 				do_cleanup(monty, monty->lines, tokens, s,
 					   CLEAN_ALL);

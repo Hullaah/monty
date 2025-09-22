@@ -9,12 +9,12 @@ void mod(stack_t **stack, unsigned int line_number)
 	first = (*stack)->next;
 	second = first->next;
 	if (empty(*stack) || second == *stack) {
-		printf("L%u: can't div, stack too short\n", line_number);
+		fprintf(stderr, "L%u: can't div, stack too short\n", line_number);
 		monty->error = true;
 		return;
 	}
 	if (first->n == 0) {
-		printf("L%u: division by zero\n", line_number);
+		fprintf(stderr, "L%u: division by zero\n", line_number);
 		monty->error = true;
 		return;
 	}

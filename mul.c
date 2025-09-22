@@ -9,7 +9,7 @@ void mul(stack_t **sentinel, unsigned int line_number)
 	first = (*sentinel)->next;
 	second = first->next;
 	if (empty(*sentinel) || second == *sentinel) {
-		printf("L%u: can't sub, stack too short\n", line_number);
+		fprintf(stderr, "L%u: can't sub, stack too short\n", line_number);
 		monty->error = true;
 		return;
 	}
